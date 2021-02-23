@@ -11,7 +11,7 @@ dotenv.config({ path: ".env.jlc" });
  * Connect to MongoDB.
  */
 mongoose
-    .connect('mongodb://localhost:27017', {
+    .connect(process.env.MONGODB_URI, {
         useUnifiedTopology: true,
         useFindAndModify: false,
         useNewUrlParser: true,
@@ -32,9 +32,13 @@ mongoose
 //Add middlewares  
 
 const app = express();
+const PORT = process.env.PORT || 5500;
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+
 const mycourseController = require("./src/controllers/CourseController");
 app.use("/myapi/", mycourseController);
 
@@ -48,8 +52,8 @@ app.get("/hello", (req, res) => {
 
 
 //Start express server on port 5500
-const PORT = process.env.PORT || 5500;
+
 app.listen(PORT, () => {
-    console.log("Hello, Express server is running at http://localhost:%d", PORT);
+    console.log("Express server is running at http://localhost:%d", PORT);
     console.log("Press CTRL-C to stop\n");
 });
